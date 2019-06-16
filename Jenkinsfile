@@ -12,6 +12,8 @@ pipeline {
                 
             }
         }
+        stage('Parallel Stage') {
+            parallel {
         stage('archive') { 
             steps {
                  archiveArtifacts 'target/*.?ar'
@@ -20,6 +22,8 @@ pipeline {
         stage('junit') { 
             steps {
                 junit 'target/surefire-reports/*.xml'
+            }
+        }
             }
         }
     }
