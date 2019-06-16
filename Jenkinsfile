@@ -1,20 +1,20 @@
 pipeline {
     agent any 
-     tools {
+    tools {
         maven 'M3' 
         jdk 'java8'
     }
+    parameters { string(name: 'DEPLOY', defaultValue: 'no', description: '') }
     stages {
         stage('Build') { 
             steps {
-            
               sh 'mvn clean package'
-                
             }
         }
-        stage('Parallel Stage') {
-            parallel {
-        stage('archive') { 
+        stage('archive') {
+            when {
+                DEPLOY = "yes"
+            }
             steps {
                  archiveArtifacts 'target/*.?ar'
             }
@@ -22,8 +22,6 @@ pipeline {
         stage('junit') { 
             steps {
                 junit 'target/surefire-reports/*.xml'
-            }
-        }
             }
         }
     }
